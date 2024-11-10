@@ -3,8 +3,11 @@ import * as StyledComponents from './styles';
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import Persistence from 'services/persistence';
+import { useNavigate } from 'react-router-dom';
 
 export function ListItem (props) {
+
+    const nav = useNavigate();
 
     async function toggleLiked (evt) {
         evt.stopPropagation();
@@ -21,7 +24,7 @@ export function ListItem (props) {
     }
 
     async function openDetails () {
-        console.log('open details')
+        nav('/recomendations/' + props.item.title);
     }
 
     return (
