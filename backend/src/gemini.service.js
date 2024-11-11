@@ -5,11 +5,19 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 class GeminiService {
 
     async ask (question) {
+
+        const genAI = new GoogleGenerativeAI(process.env.IA_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent(question);
+        const response = result.response.text();
+
         this.registerLog({
             question,
             response,
             createdAt: new Date().toISOString()
         });
+
+        return response;
     }
 
     async recomendations (question = '') {
