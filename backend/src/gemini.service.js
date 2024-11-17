@@ -25,9 +25,8 @@ class GeminiService {
         const initQuestion = `
             me de { list: [ { 
             title: 'titulo do filme', 
-            description: 'descricao do filme', 
-            image_url: 'url da imagem do titulo do filme'  
-            } ] }, a lista deve ter 3 filmes
+            description: 'descricao do filme'
+            } ] }, quero apenas o json, a lista deve ter 3 filmes
         `;
 
         const genAI = new GoogleGenerativeAI(process.env.IA_KEY);
@@ -64,8 +63,7 @@ class GeminiService {
     }
 
     async registerLog (newLog) {
-        const log = new Log(newLog);
-        await AppDataSource.manager.save(log);
+        await AppDataSource.manager.getRepository(Log).save(newLog);
     }
 }
 

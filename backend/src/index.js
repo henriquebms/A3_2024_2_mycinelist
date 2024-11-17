@@ -34,13 +34,26 @@ app.get('/consultar', async (req, res) => {
 })
 
 app.post('/recomendations', async (req, res) => {
-  return res.send(await gemini.recomendations(req.body.question))
+  try {
+    return res.send(await gemini.recomendations(req.body.question))
+  } catch (error) {
+    return res.status(500);
+  }
 })
 
 app.post('/recomendation', async (req, res) => {
-  return res.send(await gemini.recomendation(req.body.question))
+  try {
+    return res.send(await gemini.recomendation(req.body.question))
+  } catch (error) {
+    return res.status(500);
+  }
 })
 
 app.listen(port, () => {
+  gemini.registerLog({ 
+    question: "aaa",
+    response: "qwddqwed",
+    createdAt: new Date().toISOString()
+   })
   console.log(`Example app listening on port ${port}`)
 })
