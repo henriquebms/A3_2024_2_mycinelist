@@ -20,32 +20,27 @@ export class GeminiService {
         this.ia = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     }
 
-    async recomendations(question = '') {
+    async recomendations(question: string) {
         const initQuestion = `
-            me de { list: [ { 
+            quero uma lista de filmes desse tipo { list: [ { 
             title: 'titulo do filme', 
-            description: 'descricao do filme', 
-            image_url: 'url da imagem do titulo do filme'  
-            } ] }, a lista deve ter 3 filmes
+            description: 'descricao do filme'
+            } ] }, quero apenas o json, a lista deve ter 3 filmes
         `;
-        try {
 
-            const result = await this.ia.generateContent(initQuestion + " e o usuario busca por: " + question);
-            const response = result.response.text();
+        const result = await this.ia.generateContent(initQuestion + " e o usuario busca por: " + question);
+        const response = result.response.text();
 
-            await this.registerLog({
-                question: initQuestion + " e o usuario busca por: " + question,
-                response,
-                createdAt: new Date().toISOString()
-            });
+        this.registerLog({
+            question,
+            response,
+            createdAt: new Date().toISOString()
+        });
 
-            return response.replace("```json", "").replace("```", "").trim(); 
-        } catch (error) {
-            throw error;
-        }
+        return response.replace("```json", "").replace("```", "").trim();
     }
 
-    async recomendation(question = '') {
+    async recomendation(movie: string) {
         const initQuestion = `
             me de { 
                 title: 'titulo do filme', 
@@ -54,24 +49,20 @@ export class GeminiService {
                 tags: [ 'tags do filme (no maximo 6)' ]  
             }, do filme
         `;
-        try {
 
-            const result = await this.ia.generateContent(initQuestion + " " + question);
-            const response = result.response.text();
+        const result = await this.ia.generateContent(initQuestion + " " + movie);
+        const response = result.response.text();
 
-            await this.registerLog({
-                question: initQuestion + " " + question,
-                response,
-                createdAt: new Date().toISOString()
-            });
+        this.registerLog({
+            question: initQuestion + " " + movie,
+            response,
+            createdAt: new Date().toISOString()
+        });
 
-            return response.replace("```json", "").replace("```", "").trim(); 
-        } catch (error) {
-            throw error;
-        }
+        return response.replace("```json", "").replace("```", "").trim();
     }
 
-    async registerLog (log: Log) {
+    async registerLog(log: Log) {
         await this.logRepository.save(new Log(log));
     }
 
