@@ -55,11 +55,11 @@ export class GeminiService {
 
         this.registerLog({
             question: initQuestion + " " + movie,
-            response,
+            response: JSON.parse(response.replace("```json", "").replace("```", "").trim()),
             createdAt: new Date().toISOString()
         });
 
-        return response.replace("```json", "").replace("```", "").trim();
+        return JSON.parse(response.replace("```json", "").replace("```", "").trim());
     }
 
     async registerLog(log: Log) {

@@ -13,6 +13,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { Recomendation } from 'screens/Recomendation';
+import { Favorites } from 'screens/Favorites';
 
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: '/recomendations/:name',
     element: <Recomendation/>
+  },
+  {
+    path: '/favorites',
+    element: <Favorites/>
   }
 ]);
 

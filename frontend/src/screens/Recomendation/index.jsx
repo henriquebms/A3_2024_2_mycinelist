@@ -18,24 +18,33 @@ export const Recomendation = props => {
 
     React.useEffect(() => { getMovie() }, [])
 
-    const toggleFavorite = () => {
-        
-        let newList = state.list;
+    async function toggleFavorite (evt) {
 
-        if(state.list.find(e => e === state.movie.title)) {
-            newList = state.list.filter(e => e !== state.movie.title);
+        evt.stopPropagation();
+
+        let newList = [...list || []];
+
+        if ((list || []).find(e => e?.title === state.movie.title)) {
+            newList = (list || []).filter(e => e?.title !== state.movie.title);
         } else {
-            newList.push(state.movie.title);
+            newList.push(state.movie);
         }
 
         newList = Object.values([
             ...newList || []
-        ].reduce((o, k) => (o[k] = k, o), {}));
+        ]
+        .map(e => ({ ...e, liked: true }))
+        .filter(e => typeof e === 'object')
+        .reduce((o, k) => (o[k?.title] = k, o), {}));
+
+        const newState = state.list.map(movie => ({
+            ...movie,
+            liked: list.some(fav => fav?.title === state.movie?.title)
+        }))
 
         persistence.save({ ...storageData, list: newList });
 
-        setState(e => ({ ...e, list: newList }));
-
+        setState(e => ({ ...e, list: newState }));
     }
 
     async function getMovie () {
@@ -87,7 +96,7 @@ export const Recomendation = props => {
                     <p>{state.movie.recommendation}</p>
                     <Components.Button onClick={toggleFavorite}>
                         {
-                            (state.list || []).find(e => e === state.movie.title) 
+                            (list || []).find(e => e?.title === state.movie.title) 
                             ? 'Remover da minha lista'
                             : 'Colocar na minha lista'
                         }

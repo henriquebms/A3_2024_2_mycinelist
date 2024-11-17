@@ -72,24 +72,27 @@ export const Recomendations = props => {
 
         let newList = [...list || []];
 
-        if ((list || []).find(e => e === movie.title)) {
-            newList = (list || []).filter(e => e !== movie.title);
+        if ((list || []).find(e => e?.title === movie.title)) {
+            newList = (list || []).filter(e => e?.title !== movie.title);
         } else {
-            newList.push(movie.title);
+            newList.push(movie);
         }
 
         newList = Object.values([
             ...newList || []
-        ].reduce((o, k) => (o[k] = k, o), {}));
+        ]
+        .map(e => ({ ...e, liked: true }))
+        .filter(e => typeof e === 'object')
+        .reduce((o, k) => (o[k?.title] = k, o), {}));
+
+        const newState = state.list.map(movie => ({
+            ...movie,
+            liked: list.some(fav => fav?.title === movie?.title)
+        }))
 
         persistence.save({ ...storageData, list: newList });
 
-        setState(e => ({
-            ...e, list: e.list.map(movie => ({
-                ...movie,
-                liked: list.find(fav => fav === movie)
-            }))
-        }))
+        setState(e => ({ ...e, list: newState }));
     }
 
     return (
