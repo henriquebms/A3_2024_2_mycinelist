@@ -34,13 +34,6 @@ export const Header = props => {
                     Minha lista
                 </span>
             </StyledComponents.NavContainer>
-            <StyledComponents.NavContainer
-                onClick={e => navigate('/history')}
-                selected={window.location.pathname === '/history'}>
-                <span>
-                    Histórico
-                </span>
-            </StyledComponents.NavContainer>
         </StyledComponents.Container>
     );
 }

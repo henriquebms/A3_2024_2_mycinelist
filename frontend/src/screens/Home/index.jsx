@@ -56,13 +56,13 @@ export const Home = props => {
                     <StyledComponents.ChooseContent onClick={() => nav('/recomendations')}>
                         Recomendações por genero
                     </StyledComponents.ChooseContent>
-                    <StyledComponents.ChooseContent onClick={() => nav('/game')}>
+                    {/* <StyledComponents.ChooseContent onClick={() => nav('/game')}>
                         Jogo interativo
                     </StyledComponents.ChooseContent>
                     <StyledComponents.ChooseContent onClick={() => nav('/resume')}>
                         Resumos
-                    </StyledComponents.ChooseContent>
-                    <StyledComponents.ChooseContent onClick={() => nav('/search')}>
+                    </StyledComponents.ChooseContent> */}
+                    <StyledComponents.ChooseContent onClick={() => nav('/recomendations')}>
                         Busca por atores ou diretores
                     </StyledComponents.ChooseContent>
                 </StyledComponents.ChooseContainer>
