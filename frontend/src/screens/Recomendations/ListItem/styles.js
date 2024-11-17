@@ -28,7 +28,8 @@ export const Container = styled.div`
 `;
 
 export const InformationContainer = styled.div`
-    width: calc(97% - 150px - 20px);
+    width: calc(100%);
+    padding: 20px;
     height: 100%;
     display: flex;
     flex-direction: column;

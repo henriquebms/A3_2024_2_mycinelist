@@ -33,6 +33,10 @@ export const MovieImageContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 15px;
+
+    & > h3 {
+        margin: 0;
+    }
 `;
 
 export const InformationContainer = styled.div`

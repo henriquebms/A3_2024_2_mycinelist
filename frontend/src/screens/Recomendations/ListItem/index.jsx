@@ -4,37 +4,33 @@ import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import Persistence from 'services/persistence';
 import { useNavigate } from 'react-router-dom';
+import persistence from 'services/persistence';
 
 export function ListItem (props) {
 
     const nav = useNavigate();
+    const { list, ...storageData } = persistence.get();
 
-    async function toggleLiked (evt) {
+    const toggleLiked = (evt) => {
         evt.stopPropagation();
-        const newData = [...Persistence.get()]
-            .map(e => ({ 
-                ...e, 
-                liked: props?.item.id === e.id 
-                ? !!props?.item?.liked 
-                : e.liked 
-            }));
-        
-        Persistence.save(newData);
-        
+        props.toggleLiked(props.item);
     }
 
     async function openDetails () {
         nav('/recomendations/' + props.item.title);
     }
 
+    function isFavorite () {
+        return list.find(e => e === props?.item?.title);
+    }
+
     return (
         <StyledComponents.Container onClick={openDetails}>
-            <img src={props?.item?.image_url} alt={"imagem do filme: " + props?.item?.title} />
             <StyledComponents.InformationContainer>
                 <h3>
                     {props?.item?.title || 'Desconhecido...'}
                     {
-                        props?.item?.liked
+                        isFavorite()
                         ? <FaHeart color='red' onClick={toggleLiked}/> 
                         : <FaRegHeart onClick={toggleLiked}/>
                     }

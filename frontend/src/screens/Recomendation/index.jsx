@@ -9,29 +9,23 @@ export const Recomendation = props => {
     const { list, ...storageData } = persistence.get();
 
     const [state, setState] = React.useState({
-        list: list
+        list: list,
+        loading: true,
+        movie: null
     })
 
-    console.log(storageData, list)
-
-    const movie = {
-        "title": "Inception",
-        "recomendation": "Inception é um thriller de ficção científica dirigido por Christopher Nolan, lançado em 2010. O filme acompanha Dom Cobb, um ladrão que invade sonhos para roubar segredos valiosos. Ele é oferecido uma chance de redimir seu passado ao realizar uma tarefa complexa: plantar uma ideia na mente de alguém. Com uma equipe especializada, Cobb embarca em uma missão que desafia a realidade e os limites do subconsciente, enquanto enfrenta seus próprios demônios internos.",
-        "description": "Inception é um thriller de ficção científica dirigido por Christopher Nolan, lançado em 2010. O filme acompanha Dom Cobb, um ladrão que invade sonhos para roubar segredos valiosos. Ele é oferecido uma chance de redimir seu passado ao realizar uma tarefa complexa: plantar uma ideia na mente de alguém. Com uma equipe especializada, Cobb embarca em uma missão que desafia a realidade e os limites do subconsciente, enquanto enfrenta seus próprios demônios internos.",
-        "image_url": "https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SY679_.jpg",
-        "tags": ["sci-fi", "space travel", "black holes", "time dilation", "relativity", "future of Earth", "human survival", "love", "family bonds", "exploration", "wormholes", "astronauts", "alien planets", "Nolan", "epic visuals", "space-time", "AI robots"]
-    }
-
     const params = useParams();
+
+    React.useEffect(() => { getMovie() }, [])
 
     const toggleFavorite = () => {
         
         let newList = state.list;
 
-        if(state.list.find(e => e === movie.title)) {
-            newList = state.list.filter(e => e !== movie.title);
+        if(state.list.find(e => e === state.movie.title)) {
+            newList = state.list.filter(e => e !== state.movie.title);
         } else {
-            newList.push(movie.title);
+            newList.push(state.movie.title);
         }
 
         newList = Object.values([
@@ -44,33 +38,63 @@ export const Recomendation = props => {
 
     }
 
+    async function getMovie () {
+
+        let response;
+        try {
+            response = await fetch('http://localhost:3001/recomendation', {
+                method: 'POST',
+                body: JSON.stringify({
+                    question: params.name
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                  },
+            });
+        } catch (error) {
+            console.log(error)
+        }
+        const body = await response.json();
+        console.log("Body", body)
+        setState(e => ({ 
+            ...e,
+            loading: false,
+            movie: body
+        }));
+    }
+
     return (
         <StyledComponents.Wrapper>
-            <StyledComponents.Container>
+            {
+                state.loading
+                ? <p>Carregando...</p>
+                : <StyledComponents.Container>
                 <StyledComponents.MovieImageContainer>
-                    <StyledComponents.MovieImage src={movie.image_url} />
+                    {/* <StyledComponents.MovieImage src={state.movie.image_url} /> */}
+                    <h3>Tags</h3>
                     <StyledComponents.TagContainer>
                         {
-                            movie.tags
+                            state.movie.tags
                             .filter((_, i) => i < 6)
                             .map(e => (<Components.Tag name={e} />))
                         }
                     </StyledComponents.TagContainer>
                 </StyledComponents.MovieImageContainer>
                 <StyledComponents.InformationContainer>
-                    <h3>{movie.title}</h3>
-                    <p>{movie.description}</p>
+                    <h3>{state.movie.title}</h3>
+                    <p>{state.movie.description}</p>
                     <h4>Recomendação:</h4>
-                    <p>{movie.recomendation}</p>
+                    <p>{state.movie.recommendation}</p>
                     <Components.Button onClick={toggleFavorite}>
                         {
-                            (state.list || []).find(e => e === movie.title) 
+                            (state.list || []).find(e => e === state.movie.title) 
                             ? 'Remover da minha lista'
                             : 'Colocar na minha lista'
                         }
                     </Components.Button>
                 </StyledComponents.InformationContainer>
             </StyledComponents.Container>
+            }
         </StyledComponents.Wrapper>
     );
 };

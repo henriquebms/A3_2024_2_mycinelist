@@ -12,7 +12,9 @@ class Persistence {
         if (jsonData) {
           return JSON.parse(jsonData);
         }
-        return [];
+        return {
+          list: []
+        };
       }
 }
 

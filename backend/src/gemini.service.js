@@ -48,7 +48,9 @@ class GeminiService {
 
         const initQuestion = `
             me de { 
-                recomendation: 'recomendacao do filme',
+                title: 'titulo do filme', 
+                description: 'descricao do filme',
+                recommendation: 'recomendacao do filme',
                 tags: [ 'tags do filme (no maximo 6)' ]  
             }, do filme
         `;

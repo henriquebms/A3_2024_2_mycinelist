@@ -37,7 +37,7 @@ app.post('/recomendations', async (req, res) => {
   return res.send(await gemini.recomendations(req.body.question))
 })
 
-app.get('/recomendation', async (req, res) => {
+app.post('/recomendation', async (req, res) => {
   return res.send(await gemini.recomendation(req.body.question))
 })
 
