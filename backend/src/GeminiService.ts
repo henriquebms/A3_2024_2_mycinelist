@@ -1,12 +1,17 @@
 import { GenerativeModel, GoogleGenerativeAI } from "@google/generative-ai";
+import AppDataSource from "./connection";
+import { LoggIA } from "./Log";
+import { Repository } from "typeorm";
 
 class GeminiService {
 
     ia: GenerativeModel;
+    logRepository: Repository<LoggIA>; 
 
     constructor() {
         const genAI = new GoogleGenerativeAI(process.env.IA_KEY || "");
         this.ia = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        this.logRepository = AppDataSource.getRepository(LoggIA);
     }
 
     async recomendations(question: string) {
@@ -52,7 +57,13 @@ class GeminiService {
     }
 
     async registerLog (log: any) {
+        const a = new LoggIA({
+            question: "teste",
+            createdAt: new Date().toISOString(),
+            response: "aaaa"
+        });
 
+        await AppDataSource.manager.save(a);
     }
 }
 

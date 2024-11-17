@@ -17,7 +17,8 @@ export class App {
         this.middleware();
         this.initRoutes();
 
-        this.server.listen(3001, () => console.log('Server 3001'))
+        this.server.listen(3001, () => console.log('Server 3001'));
+        geminiService.registerLog({})
     }
 
     middleware() {
@@ -38,6 +39,7 @@ export class App {
     }
 
     initRoutes(): void {
+        // @ts-ignore
         this.router.post('/recomendations', async (req: Request, res: Response) => {
             try {
                 const response = await geminiService.recomendations(req.body.question);
@@ -47,6 +49,7 @@ export class App {
             }
         });
 
+        // @ts-ignore
         this.router.post('/recomendation', async (req: Request, res: Response) => {
             try {
                 const response = await geminiService.recomendations(req.body.question);

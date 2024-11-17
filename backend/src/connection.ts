@@ -1,15 +1,16 @@
 import { DataSource } from "typeorm";
-import Log from "./log.entity.js";
+import { LoggIA } from "./Log";
 
 const AppDataSource = new DataSource({
     type: "postgres",
-    host: "localhost",
+    host: "127.0.0.1",
     port: 5433,
-    username: 'postgres',
-    password: '1234',
-    database: 'my_cine_list',
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
     logging: false,
-    entities: [Log],
+    synchronize: true,
+    entities: [LoggIA],
     subscribers: [],
     migrations: [],
 })
