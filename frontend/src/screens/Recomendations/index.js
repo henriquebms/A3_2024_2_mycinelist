@@ -53,6 +53,7 @@ export const Recomendations = props => {
             const body = await response.json();
             setState(e => ({
                 ...e,
+                loading: false,
                 list: body.list.map(movie => {
                     return {
                         ...movie,

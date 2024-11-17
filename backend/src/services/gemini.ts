@@ -22,10 +22,10 @@ export class GeminiService {
 
     async recomendations(question: string) {
         const initQuestion = `
-            quero uma lista de filmes desse tipo { list: [ { 
+            quero um array de filmes desse tipo { list: [ { 
             title: 'titulo do filme', 
             description: 'descricao do filme'
-            } ] }, quero apenas o json, a lista deve ter 3 filmes
+            } ] }, quero apenas o json formatado, a lista deve ter 3 filmes
         `;
 
         const result = await this.ia.generateContent(initQuestion + " e o usuario busca por: " + question);
@@ -33,11 +33,11 @@ export class GeminiService {
 
         this.registerLog({
             question,
-            response,
+            response: JSON.parse(response.replace("```json", "").replace("```", "").trim()),
             createdAt: new Date().toISOString()
         });
 
-        return response.replace("```json", "").replace("```", "").trim();
+        return JSON.parse(response.replace("```json", "").replace("```", "").trim());
     }
 
     async recomendation(movie: string) {

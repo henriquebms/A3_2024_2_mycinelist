@@ -31,7 +31,7 @@ export class RecomendationController extends BaseHttpController implements inter
     public async getRecomendations(@request() req: CustomRequest, res: express.Response) {
         try {
             const response = await this.geminiService.recomendations(req.body.question);
-            return this.ok(response);
+            return this.json(response);
         } catch (error) {
             res.status(500).send(error);
         }
